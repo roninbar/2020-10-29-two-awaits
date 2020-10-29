@@ -11,7 +11,7 @@ async function fetchAllCountriesAsync() {
 
 window.addEventListener('load', async function () {
     const countries = await fetchAllCountriesAsync();
-    const lis = countries.map(({ name }) => {
+    const lis = countries.map(function ({ name }) {
         const li = document.createElement('li');
         li.innerText = name;
         return li;
