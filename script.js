@@ -12,30 +12,31 @@ async function fetchAllCountries1Async() {
 }
 
 function fetchAllCountries2Async() {
-    return fetch(ALLCOUNTRIESURL).then(function (response) {
-        const { status, statusText } = response;
-        if (200 <= status && status < 300) {
-            return response.json();
-        }
-        else {
-            throw new Error(`${status} ${statusText}`);
-        }
-    });
+    return fetch(ALLCOUNTRIESURL)
+        .then(function (response) {
+            const { status, statusText } = response;
+            if (200 <= status && status < 300) {
+                return response.json();
+            }
+            else {
+                throw new Error(`${status} ${statusText}`);
+            }
+        });
 }
 
 window.addEventListener('load', function () {
 
     const ul = document.querySelector('ul');
 
-    function createLi(text) {
+    function createLi({ name }) {
         const li = document.createElement('li');
-        li.innerText = text;
+        li.innerText = name;
         return li;
     }
 
     function populateList(countries) {
         ul.innerHTML = '';
-        ul.append(...countries.map(({ name }) => createLi(name)));
+        ul.append(...countries.map(createLi));
     }
 
     document.getElementById('await').addEventListener('click', async function () {
@@ -48,11 +49,13 @@ window.addEventListener('load', function () {
     });
 
     document.getElementById('then').addEventListener('click', function () {
-        fetchAllCountries2Async().then(function (countries) {
-            populateList(countries);
-        }).catch(function (error) {
-            alert(error);
-        });
+        fetchAllCountries2Async()
+            .then(function (countries) {
+                populateList(countries);
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     });
 
     document.getElementById('clear').addEventListener('click', function () {
