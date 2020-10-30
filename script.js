@@ -38,7 +38,7 @@ window.addEventListener('load', function () {
         ul.append(...countries.map(({ name }) => createLi(name)));
     }
 
-    document.getElementById('async').addEventListener('click', async function () {
+    document.getElementById('await').addEventListener('click', async function () {
         try {
             const countries = await fetchAllCountries1Async();
             populateList(countries);
