@@ -1,7 +1,9 @@
-const ALLCOUNTRIESURL = 'https://restcountries.eu/rest/v2/all';
+function fetchAllCountriesAsync() {
+    return fetch('https://restcountries.eu/rest/v2/all', { mode: 'cors' });
+}
 
 async function fetchAllCountries1Async() {
-    const response = await fetch(ALLCOUNTRIESURL);
+    const response = await fetchAllCountriesAsync();
     const { status, statusText } = response;
     if (200 <= status && status < 300) {
         return await response.json();
@@ -12,7 +14,7 @@ async function fetchAllCountries1Async() {
 }
 
 function fetchAllCountries2Async() {
-    return fetch(ALLCOUNTRIESURL)
+    return fetchAllCountriesAsync()
         .then(function (response) {
             const { status, statusText } = response;
             if (200 <= status && status < 300) {
@@ -28,7 +30,7 @@ window.addEventListener('load', function () {
 
     const ul = document.querySelector('ul');
 
-    function createLi({ name }) {
+    function countryToLi({ name }) {
         const li = document.createElement('li');
         li.innerText = name;
         return li;
@@ -36,7 +38,7 @@ window.addEventListener('load', function () {
 
     function populateList(countries) {
         ul.innerHTML = '';
-        ul.append(...countries.map(createLi));
+        ul.append(...countries.map(countryToLi));
     }
 
     document.getElementById('await').addEventListener('click', async function () {
