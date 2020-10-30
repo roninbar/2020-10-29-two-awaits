@@ -1,5 +1,7 @@
-async function fetchAllCountriesAsync() {
-    const response = await fetch('https://restcountries.eu/rest/v2/all');
+const ALLCOUNTRIESURL = 'https://restcountries.eu/rest/v2/all';
+
+async function fetchAllCountries1Async() {
+    const response = await fetch(ALLCOUNTRIESURL);
     const { status, statusText } = response;
     if (200 <= status && status < 300) {
         return await response.json();
@@ -7,6 +9,18 @@ async function fetchAllCountriesAsync() {
     else {
         throw new Error(`${status} ${statusText}`);
     }
+}
+
+function fetchAllCountries2Async() {
+    return fetch(ALLCOUNTRIESURL).then(function (response) {
+        const { status, statusText } = response;
+        if (200 <= status && status < 300) {
+            return response.json();
+        }
+        else {
+            throw new Error(`${status} ${statusText}`);
+        }
+    });
 }
 
 window.addEventListener('load', function () {
@@ -26,22 +40,15 @@ window.addEventListener('load', function () {
 
     document.getElementById('async').addEventListener('click', async function () {
         try {
-            populateList(await fetchAllCountriesAsync());
+            const countries = await fetchAllCountries1Async();
+            populateList(countries);
         } catch (error) {
             alert(error);
         }
     });
 
     document.getElementById('then').addEventListener('click', function () {
-        fetch('https://restcountries.eu/rest/v2/all').then(function (response) {
-            const { status, statusText } = response;
-            if (200 <= status && status < 300) {
-                return response.json();
-            }
-            else {
-                throw new Error(`${status} ${statusText}`);
-            }
-        }).then(function (countries) {
+        fetchAllCountries2Async().then(function (countries) {
             populateList(countries);
         }).catch(function (error) {
             alert(error);
